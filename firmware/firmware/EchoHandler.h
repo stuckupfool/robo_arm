@@ -5,7 +5,8 @@
 class EchoHandler :
 	public CommandHandler
 {
+private:
 public:
-	bool Process(Command comm);
+	bool Process(Command *comm);
 };
 

@@ -1,21 +1,55 @@
 #include "CommandReceiver.h"
 
 CommandReceiver::CommandReceiver() {
-	Serial.begin(BAUD_RATE);
+    handlerCapacity = 2;
+    handlerMap = new CommandHandlerKVP*[handlerCapacity];
 }
 
+CommandReceiver::CommandReceiver(int init_capacity)
+{
+    handlerCapacity = init_capacity;
+    handlerMap = new CommandHandlerKVP * [handlerCapacity];
+}
+
+//Free handlers and the command receiver
 CommandReceiver::~CommandReceiver() {
+    for (int i = 0; i < handlerCount;i++) {
+        delete handlerMap[i]->handler;
+    }
     delete handlerMap;
 }
 
 bool CommandReceiver::registerCommandHandler(byte opCode, CommandHandler *comm) {
     if (!isRegisterdOpCode(opCode)) {
-        handlerMap[opCode] = comm;
+        if (handlerCount >= handlerCapacity) {
+           expandHandlerMap(handlerCapacity * 2);
+        }
+        CommandHandlerKVP *newHandler = new CommandHandlerKVP();
+        newHandler->operation = opCode;
+        newHandler->handler = comm;
+        handlerMap[handlerCount++] = newHandler;
+    }
+}
+
+void CommandReceiver::expandHandlerMap(int newCapacity) {
+    if (newCapacity > handlerCapacity) {
+        CommandHandlerKVP** tempHolder = handlerMap;
+        handlerCapacity = newCapacity;
+
+        handlerMap = new CommandHandlerKVP*[handlerCapacity];
+        
+        memcpy(handlerMap, tempHolder, handlerCount * sizeof(CommandHandlerKVP*));
+        delete tempHolder;
     }
 }
 
 bool CommandReceiver::isRegisterdOpCode(byte code) {
-    return (handlerMap[code] != nullptr);
+    for (int i = 0; i < handlerCount; i++) {
+        if (handlerMap[i]->operation == code) {
+            return true;
+        }
+    }
+    return false;
 }
 
 int CommandReceiver::opCodeStartPos(byte data[],int length) {
@@ -25,11 +59,11 @@ int CommandReceiver::opCodeStartPos(byte data[],int length) {
     return -1;
 }
 
-bool CommandReceiver::parseCommand(Command comm) {
-    byte opCode = comm.operation;
-    if (isRegisterdOpCode(opCode)) {
-        if (handlerMap[opCode] != nullptr) {
-            return handlerMap[opCode]->Process(comm);
+bool CommandReceiver::parseCommand(Command *comm) {
+    byte opCode = comm->operation;
+    for(int i = 0; i < handlerCount; i++) {
+        if (handlerMap[i]->operation == comm->operation) {
+            return handlerMap[i]->handler->Process(comm);
         }
     }
 
@@ -57,7 +91,8 @@ void CommandReceiver::receiveAndParse() {
                 if (opCodePos >= 0) {
                     isReceivingCommand = true;
                     opCodePos = commandBufferPos - readAmountBytes + opCodePos; //Position now relative to command buffer
-                    inFlightCommand.operation = (OpCode)commandBuffer[opCodePos];
+                    inFlightCommand = new Command();
+                    inFlightCommand->operation = /*(OpCode)*/commandBuffer[opCodePos];
                 }
             }
 
@@ -66,16 +101,21 @@ void CommandReceiver::receiveAndParse() {
                 int commandBytes = commandBufferPos - opCodePos;
                 if (commandBytes >= 3) { //1 byte op code, + 2 bytes data length
                     int dataLength = ((int)commandBuffer[opCodePos + 1] << 8) + commandBuffer[opCodePos + 2];
-                    inFlightCommand.dataLength = dataLength;
+                    inFlightCommand->dataLength = dataLength;
 
                     if (commandBytes >= (3 + dataLength)) {
-                        inFlightCommand.parameters = new byte[dataLength];
-                        memcpy(inFlightCommand.parameters, commandBuffer + 3, dataLength);
+                        //We have the rest of the command (and maybe more)
+                        inFlightCommand->parameters = new byte[dataLength];
+                        memcpy(inFlightCommand->parameters, commandBuffer + 3, dataLength);
                         isReceivingCommand = false; //End of parsing ops
                         opCodePos = -1; //Reset
 
                         //Dispatch parsing
                         parseCommand(inFlightCommand);
+
+                        //Cleanup
+                        delete inFlightCommand->parameters;
+                        delete inFlightCommand;
 
                         //Account for any extra data in the command buffer, it may be the start of a new command
                         int remainingDataPos = opCodePos + 3 + dataLength + 1;
@@ -104,12 +144,12 @@ void CommandReceiver::serialPrintCommandBuffer(byte buffer[], int length) {
     Serial.println("");
 }
 
-void CommandReceiver::printCommandSpec(Command comm) {
+void CommandReceiver::printCommandSpec(Command *comm) {
     Serial.print("+=Not-implemented Command Received, Operation: ");
-    Serial.print(comm.operation);
+    //Serial.print(comm->operation);
     Serial.print(", Data Size: ");
-    Serial.print(comm.dataLength);
+    //Serial.print(comm.dataLength);
     Serial.print(", Parameter: ");
-    Serial.write(comm.parameters, comm.dataLength);
+    //Serial.write(comm.parameters, comm.dataLength);
     Serial.println(" =+");
 }

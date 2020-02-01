@@ -18,7 +18,7 @@ typedef enum OpCodes OpCode;
  *                        equal the data length segment which preceedes.
  */
 struct CommandSpec {
-    OpCode operation;
+    byte operation;
     int dataLength;
     byte* parameters;
 };

@@ -7,3 +7,12 @@ C:\Users\poop\source\repos\ArmFrontEnd\ArmFrontEnd\obj\Debug\ArmFrontEnd.Propert
 C:\Users\poop\source\repos\ArmFrontEnd\ArmFrontEnd\obj\Debug\ArmFrontEnd.csproj.GenerateResource.cache
 C:\Users\poop\source\repos\ArmFrontEnd\ArmFrontEnd\obj\Debug\ArmFrontEnd.exe
 C:\Users\poop\source\repos\ArmFrontEnd\ArmFrontEnd\obj\Debug\ArmFrontEnd.pdb
+C:\Users\poop\Documents\Projects\RoboArm\ArmFrontEnd\ArmFrontEnd\bin\Debug\ArmFrontEnd.exe.config
+C:\Users\poop\Documents\Projects\RoboArm\ArmFrontEnd\ArmFrontEnd\bin\Debug\ArmFrontEnd.exe
+C:\Users\poop\Documents\Projects\RoboArm\ArmFrontEnd\ArmFrontEnd\bin\Debug\ArmFrontEnd.pdb
+C:\Users\poop\Documents\Projects\RoboArm\ArmFrontEnd\ArmFrontEnd\obj\Debug\ArmFrontEnd.csprojAssemblyReference.cache
+C:\Users\poop\Documents\Projects\RoboArm\ArmFrontEnd\ArmFrontEnd\obj\Debug\ArmFrontEnd.Form1.resources
+C:\Users\poop\Documents\Projects\RoboArm\ArmFrontEnd\ArmFrontEnd\obj\Debug\ArmFrontEnd.Properties.Resources.resources
+C:\Users\poop\Documents\Projects\RoboArm\ArmFrontEnd\ArmFrontEnd\obj\Debug\ArmFrontEnd.csproj.GenerateResource.cache
+C:\Users\poop\Documents\Projects\RoboArm\ArmFrontEnd\ArmFrontEnd\obj\Debug\ArmFrontEnd.exe
+C:\Users\poop\Documents\Projects\RoboArm\ArmFrontEnd\ArmFrontEnd\obj\Debug\ArmFrontEnd.pdb
