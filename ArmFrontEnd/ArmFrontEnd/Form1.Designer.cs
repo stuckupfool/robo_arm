@@ -69,10 +69,16 @@
 			this.pBUD = new System.Windows.Forms.NumericUpDown();
 			this.newPaletteB = new System.Windows.Forms.Button();
 			this.currentColorP = new System.Windows.Forms.Panel();
+			this.ledSpeedUD = new System.Windows.Forms.NumericUpDown();
+			this.label15 = new System.Windows.Forms.Label();
+			this.ledColorPicker = new System.Windows.Forms.ColorDialog();
+			this.ledColorSelectB = new System.Windows.Forms.Button();
+			this.gradientP = new System.Windows.Forms.Panel();
 			((System.ComponentModel.ISupportInitialize)(this.pStepUD)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pRUD)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pGUD)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pBUD)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.ledSpeedUD)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -253,9 +259,9 @@
 			this.label8.AutoSize = true;
 			this.label8.Location = new System.Drawing.Point(19, 188);
 			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(33, 13);
+			this.label8.Size = new System.Drawing.Size(58, 13);
 			this.label8.TabIndex = 20;
-			this.label8.Text = "LEDs";
+			this.label8.Text = "LED Mode";
 			// 
 			// ledModeCB
 			// 
@@ -296,7 +302,7 @@
 			// 
 			// ledB
 			// 
-			this.ledB.Location = new System.Drawing.Point(254, 204);
+			this.ledB.Location = new System.Drawing.Point(388, 204);
 			this.ledB.Name = "ledB";
 			this.ledB.Size = new System.Drawing.Size(75, 23);
 			this.ledB.TabIndex = 24;
@@ -461,11 +467,60 @@
 			this.currentColorP.Size = new System.Drawing.Size(75, 59);
 			this.currentColorP.TabIndex = 44;
 			// 
+			// ledSpeedUD
+			// 
+			this.ledSpeedUD.Location = new System.Drawing.Point(254, 204);
+			this.ledSpeedUD.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+			this.ledSpeedUD.Name = "ledSpeedUD";
+			this.ledSpeedUD.Size = new System.Drawing.Size(75, 20);
+			this.ledSpeedUD.TabIndex = 45;
+			this.ledSpeedUD.Value = new decimal(new int[] {
+            150,
+            0,
+            0,
+            0});
+			// 
+			// label15
+			// 
+			this.label15.AutoSize = true;
+			this.label15.Location = new System.Drawing.Point(254, 188);
+			this.label15.Name = "label15";
+			this.label15.Size = new System.Drawing.Size(38, 13);
+			this.label15.TabIndex = 46;
+			this.label15.Text = "Speed";
+			// 
+			// ledColorSelectB
+			// 
+			this.ledColorSelectB.Location = new System.Drawing.Point(172, 384);
+			this.ledColorSelectB.Name = "ledColorSelectB";
+			this.ledColorSelectB.Size = new System.Drawing.Size(75, 23);
+			this.ledColorSelectB.TabIndex = 47;
+			this.ledColorSelectB.Text = "Color";
+			this.ledColorSelectB.UseVisualStyleBackColor = true;
+			this.ledColorSelectB.Click += new System.EventHandler(this.ledColorSelectB_Click);
+			// 
+			// gradientP
+			// 
+			this.gradientP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.gradientP.Location = new System.Drawing.Point(447, 289);
+			this.gradientP.Name = "gradientP";
+			this.gradientP.Size = new System.Drawing.Size(633, 103);
+			this.gradientP.TabIndex = 48;
+			this.gradientP.Paint += new System.Windows.Forms.PaintEventHandler(this.gradientP_Paint);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(741, 617);
+			this.ClientSize = new System.Drawing.Size(1092, 812);
+			this.Controls.Add(this.gradientP);
+			this.Controls.Add(this.ledColorSelectB);
+			this.Controls.Add(this.label15);
+			this.Controls.Add(this.ledSpeedUD);
 			this.Controls.Add(this.currentColorP);
 			this.Controls.Add(this.newPaletteB);
 			this.Controls.Add(this.pBUD);
@@ -513,6 +568,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.pRUD)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pGUD)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pBUD)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.ledSpeedUD)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -561,6 +617,11 @@
 		private System.Windows.Forms.NumericUpDown pBUD;
 		private System.Windows.Forms.Button newPaletteB;
 		private System.Windows.Forms.Panel currentColorP;
+		private System.Windows.Forms.NumericUpDown ledSpeedUD;
+		private System.Windows.Forms.Label label15;
+		private System.Windows.Forms.ColorDialog ledColorPicker;
+		private System.Windows.Forms.Button ledColorSelectB;
+		private System.Windows.Forms.Panel gradientP;
 	}
 }
 

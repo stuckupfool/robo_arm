@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.IO.Ports;
 using System.Linq;
@@ -22,14 +23,9 @@ namespace ArmFrontEnd
 		public BindingList<FormPalette> Palettes { get; set; }
 
 		public FormPalette EditorPalette { get; set; }
-		public byte EditorStep { get; set; }
-		public byte EditorR { get; set; }
-		public byte EditorG { get; set; }
-		public byte EditorB { get; set; }
-
-		public PaletteEntry SelectedEntry { get; set; }
 
 		public BindingSource PaletteBindingSource { get; set; }
+		public BindingSource SelectedEntrySource { get; set; }
 
 
 		public Form1()
@@ -42,7 +38,6 @@ namespace ArmFrontEnd
 			Palettes = new BindingList<FormPalette>();
 			EditorPalette = new FormPalette();
 			EditorPalette.Entries.Add(new PaletteEntry());
-			SelectedEntry = new PaletteEntry();
 
 			/*Palettes.Add(new FormPalette()
 			{
@@ -79,17 +74,19 @@ namespace ArmFrontEnd
 			selectedEntrySource.CurrentItemChanged += SelectedEntrySource_CurrentItemChanged;
 
 			PaletteBindingSource = bindingSource;
+			SelectedEntrySource = selectedEntrySource;
 
-			pStepUD.DataBindings.Add(new Binding("Value", selectedEntrySource, "Step"));
-			pRUD.DataBindings.Add(new Binding("Value", selectedEntrySource, "R"));
-			pGUD.DataBindings.Add(new Binding("Value", selectedEntrySource, "G"));
-			pBUD.DataBindings.Add(new Binding("Value", selectedEntrySource, "B"));
-			pNameTB.DataBindings.Add(new Binding("Text", bindingSource, "Name"));
+			pStepUD.DataBindings.Add(new Binding("Value", selectedEntrySource, "Step",false,DataSourceUpdateMode.OnPropertyChanged));
+			pRUD.DataBindings.Add(new Binding("Value", selectedEntrySource, "R",false,DataSourceUpdateMode.OnPropertyChanged));
+			pGUD.DataBindings.Add(new Binding("Value", selectedEntrySource, "G", false, DataSourceUpdateMode.OnPropertyChanged));
+			pBUD.DataBindings.Add(new Binding("Value", selectedEntrySource, "B", false, DataSourceUpdateMode.OnPropertyChanged));
+			pNameTB.DataBindings.Add(new Binding("Text", bindingSource, "Name", false, DataSourceUpdateMode.OnPropertyChanged));
 		}
 
 		private void SelectedEntrySource_CurrentItemChanged(object sender, EventArgs e)
 		{
 			currentColorP.BackColor = Color.FromArgb((int)pRUD.Value, (int)pGUD.Value, (int)pBUD.Value);
+			gradientP.Invalidate();
 		}
 
 		private void sendB_Click(object sender, EventArgs e)
@@ -161,12 +158,13 @@ namespace ArmFrontEnd
 		private void ledB_Click(object sender, EventArgs e)
 		{
 			byte mode = Convert.ToByte(ledModeCB.SelectedIndex);
+			byte delay = Convert.ToByte(ledSpeedUD.Value);
 			ushort palette = Convert.ToUInt16(ledPaletteCB.SelectedIndex);
 
 			LedCustomCommand comm = new LedCustomCommand()
 			{
 				Mode = mode,
-				Delay = 0, //TODO
+				Delay = delay,
 				Palette = ((FormPalette)ledPaletteCB.SelectedItem).Entries.ToArray()
 
 			};
@@ -194,6 +192,38 @@ namespace ArmFrontEnd
 			var p = new FormPalette();
 			Palettes.Add(p);
 			//ledPaletteCB.SelectedItem = p;
+		}
+
+		private void ledColorSelectB_Click(object sender, EventArgs e)
+		{
+			var result = ledColorPicker.ShowDialog();
+			if(result == DialogResult.OK || result == DialogResult.Yes)
+			{
+				var color = ledColorPicker.Color;
+				/*PaletteEntry selEntry = (PaletteEntry)SelectedEntrySource.Current;
+				selEntry.R = color.R;
+				selEntry.G = color.G;
+				selEntry.B = color.B;*/
+				pRUD.Value = color.R;
+				pGUD.Value = color.G;
+				pBUD.Value = color.B;
+			}
+		}
+
+		private void gradientP_Paint(object sender, PaintEventArgs e)
+		{
+			FormPalette currPalette = (FormPalette)PaletteBindingSource.Current;
+
+			LinearGradientBrush gradBrush = /*new LinearGradientBrush(new Point(0, 0), new Point(1f, 0), Color.Black, Color.Black);//*/ new LinearGradientBrush(e.ClipRectangle, Color.Black, Color.White, 0, false);
+
+			gradBrush.InterpolationColors = new ColorBlend()
+			{
+				Positions = currPalette.Entries.Select((PaletteEntry entry, int i) => { return entry.Step / 255f; }).ToArray(),
+				Colors = currPalette.Entries.Select((PaletteEntry entry) => { return entry.Color; }).ToArray()
+			};
+
+			e.Graphics.FillRectangle(gradBrush, e.ClipRectangle);
+			//e.Graphics.DrawLine(new Pen(Color.Azure), 0, 0, 500, 64);
 		}
 	}
 

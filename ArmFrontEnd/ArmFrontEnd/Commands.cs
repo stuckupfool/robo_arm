@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -60,6 +61,7 @@ namespace ArmFrontEnd
         public byte G { get; set; }
         public byte B { get; set; }
         public string Label { get { return $"{Step} [{R},{G},{B}]"; } }
+        public Color Color { get { return Color.FromArgb(R, G, B); } }
         public void SetData(int elementIndex, byte[] data)
         {
             data[3 + (elementIndex * 4) + 0] = Step;

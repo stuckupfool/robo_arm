@@ -1,6 +1,17 @@
 #pragma once
 #include <arduino.h>
 
+#define PROG_STRING PROGMEM const char
+
+/*PROG_STRING LEDS_ON[] = "LEDs: On";
+PROG_STRING LEDS_OFF[] = "LEDs: Off";
+
+
+PROG_STRING NOT_IMPL[] = "+=Not-implemented Command Received, Operation: ";
+PROG_STRING DATA_SIZE[] = ", Data Size: ";
+PROG_STRING PARAMETERS[] = ", Parameter: ";
+PROG_STRING END[] = " =+";*/
+
 enum OpCodes {
     ECHO = 48,
     SERVO = 49,

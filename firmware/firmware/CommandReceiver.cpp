@@ -141,15 +141,15 @@ void CommandReceiver::serialPrintCommandBuffer(byte buffer[], int length) {
     for (int i = 0; i < length; i++) {
         Serial.print((char)buffer[i]);
     }
-    Serial.println("");
+    Serial.println();
 }
 
 void CommandReceiver::printCommandSpec(Command *comm) {
-    Serial.print("+=Not-implemented Command Received, Operation: ");
+    //Serial.print(NOT_IMPL);
     //Serial.print(comm->operation);
-    Serial.print(", Data Size: ");
+    //Serial.print(DATA_SIZE);
     //Serial.print(comm.dataLength);
-    Serial.print(", Parameter: ");
+    //Serial.print(PARAMETERS);
     //Serial.write(comm.parameters, comm.dataLength);
-    Serial.println(" =+");
+    //Serial.println(END);
 }

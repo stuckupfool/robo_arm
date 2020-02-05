@@ -10,7 +10,7 @@
 #define CLOCK_PIN 13
 #define LED_TYPE APA102
 
-#define NUM_LEDS 16 
+#define NUM_LEDS 48 
 //20
 #define COLOR_ORDER BGR
 //RGB

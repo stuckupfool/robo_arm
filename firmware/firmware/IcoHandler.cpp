@@ -8,7 +8,7 @@ bool IcoHandler::processOnOff(Command* command)
 			isOn = true;
 			isAnimating = false;
 			FastLED.setBrightness(max_bright);
-			Serial.println("LEDs: On");
+			//Serial.println(LEDS_ON);
 		}
 		else
 		{
@@ -17,7 +17,7 @@ bool IcoHandler::processOnOff(Command* command)
 			FastLED.setBrightness(0);
 			FastLED.show();
 			FastLED.clear();
-			Serial.println("LEDs: Off");
+			//Serial.println(LEDS_OFF);
 		}
 		return true;
 	}
@@ -61,42 +61,15 @@ bool IcoHandler::processModeCustom(Command* command)
 						 2: Green Color Channel
 						 3: Blue Color Channel
 	*/
-	//Serial.println("LEDs: Starting custom palette");
 	if (command->dataLength >= 3) {
 		mode = (uint8_t)command->parameters[0];
-		//Serial.println(mode);
-		//ico_delay = (uint8_t)command->parameters[1];
-		//Serial.println(ico_delay);
+
+		ico_delay = (uint8_t)command->parameters[1];
+		
 		const byte entryCount = command->parameters[2];
 		custom_palette_size = entryCount;
-		//Serial.println(entryCount);
-
-		/*for (int i = 0; i < entryCount; i++) {
-			const PROGMEM char p1[] = ": ";
-			const PROGMEM char p2[] = ", ";
-			Serial.print(i);
-			Serial.print(p1);
-			Serial.print(command->parameters[3 + (i * 4) + 0]);
-			Serial.print(p2);
-			Serial.print(command->parameters[3 + (i * 4) + 1]);
-			Serial.print(p2);
-			Serial.print(command->parameters[3 + (i * 4) + 2]);
-			Serial.print(p2);
-			Serial.println(command->parameters[3 + (i * 4) + 3]);
-		}*/
-
-		//byte* palette = new byte[command->dataLength - 2];
-		//memcpy(palette, command->parameters + 3, entryCount * 4);
-
-		/*for (int i = 0; i < command->dataLength - 3; i++) {
-			Serial.print((int)command->parameters[3 + i]);
-			Serial.print(", ");
-		}
-		Serial.println();*/
-
-
-
-		/*target_palette*/current_palette.loadDynamicGradientPalette(command->parameters + 3);
+		
+		current_palette.loadDynamicGradientPalette(command->parameters + 3);
 		//nblendPaletteTowardPalette(current_palette, target_palette, 1);
 
 		isAnimating = true;
@@ -128,16 +101,6 @@ bool IcoHandler::Process(Command* command)
 	}
 }
 
-// Find index of current (target) palette
-/*void IcoHandler::updatePaletteIndex(CRGBPalette16 pal) {
-	for (int i = 0; i < g_gradient_palette_count; i++) {
-		if (pal == g_gradient_palettes[i]) {
-			palette_index = i;
-			break;
-		}
-	}
-}*/
-
 void IcoHandler::Tick()
 {
 	if (isOn) {
@@ -166,42 +129,42 @@ void IcoHandler::_tick() {
 
 	switch (mode) {
 	case 0:
-		if (isNew) { ico_delay = 30; fade_val = 128; ico_index = 0; isNew = 0; };
+		if (isNew) { /*ico_delay = 30;*/ fade_val = 128; ico_index = 0; isNew = 0; };
 		spin();
 		break;
 
 	case 1:
-		if (isNew) { ico_delay = 15; delta = 128; increment = 1; isNew = 0; };
+		if (isNew) { /*ico_delay = 15;*/ delta = 128; increment = 1; isNew = 0; };
 		ico_fill_rainbow();
 		break;
 
 	case 2:
-		if (isNew) { ico_delay = 15; target_palette = HeatColors_p; /*palette_index = 0*/; delta = 8; increment = 2; isNew = 0; };
+		if (isNew) { /*ico_delay = 15;*/ target_palette = HeatColors_p; /*palette_index = 0*/; delta = 8; increment = 2; isNew = 0; };
 		ico_palette();
 		break;
 
 	case 3:
-		if (isNew) { ico_delay = 10; fade_val = 200; numdots = 2; beat = 16; hue = 0; isNew = 0; };
+		if (isNew) { /*ico_delay = 10;*/ fade_val = 200; numdots = 2; beat = 16; hue = 0; isNew = 0; };
 		juggle();
 		break;
 
 	case 4:
-		if (isNew) { ico_delay = 12; fade_val = 128; numdots = 2; beat = 20; /*palette_index = 0*/; isNew = 0; };
+		if (isNew) { /*ico_delay = 12;*/ fade_val = 128; numdots = 2; beat = 20; /*palette_index = 0*/; isNew = 0; };
 		juggle_palette();
 		break;
 
 	case 5:
-		if (isNew) { ico_delay = 30; fade_val = 160; numdots = 2; beat = 60; hue = 0; isNew = 0; };
+		if (isNew) { /*ico_delay = 30;*/ fade_val = 160; numdots = 2; beat = 60; hue = 0; isNew = 0; };
 		juggle_up_and_down();
 		break;
 
 	case 6:
-		if (isNew) { ico_delay = 60; fade_val = 160; isNew = 0; };
+		if (isNew) { /*ico_delay = 60;*/ fade_val = 160; isNew = 0; };
 		confetti();
 		break;
 
 	case 7:
-		if (isNew) { ico_delay = 60; fade_val = 180; isNew = 0; };
+		if (isNew) { /*ico_delay = 60;*/ fade_val = 180; isNew = 0; };
 		confetti_palette();
 		break;
 	case 8:
