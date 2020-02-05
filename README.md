@@ -1,2 +1,2 @@
 # robo_arm
-Robotic arm firmware and pc control front end
+ico led lamp firmware and pc control front end
